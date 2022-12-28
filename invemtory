@@ -1,36 +1,35 @@
-# define variables at the host level
-web01 ansible_host=10.0.19.20
+# Variables are defined at the host level
 
-web02 ansible_host=10.0.27.7
-
-db01 ansible_host=10.0.0.163
-
+ web01 ansible_host=10.0.19.20         #ansible_user=centos  ansible_ssh_private_key_file=vprofile-key.pem
+ web02 ansible_host=10.0.27.7          #ansible_user=centos  ansible_ssh_private_key_file=vprofile-key.pem
+ db01 ansible_host=10.0.0.163          #ansible_user=centos  ansible_ssh_private_key_file=vprofile-key.pem
 
 
+
+# Can classify your servers in groups
 [webservergrp]
 web01
 web02
 
 
-
 [dbservergrp]
-db01
+ db01
 
-
-#group of group
-
-
+# Can define the parent group and assigned specific group to it as its children
 [dc_ohio:children]
 webservergrp
 dbservergrp
 
-#define variables at group of group level
-[dc_ohio:vars]
 
+# Can assigne variables at group level:(  ansible_user=centos  ansible_ssh_private_key_file=vprofile-key.pem)
+
+[webservergrp:vars]
 ansible_user=centos
 ansible_ssh_private_key_file=vprofile-key.pem
 
-#at group level it will be defined as :
-# [webservergrp:vars]
-#ansible_user=centos
-#ansible_ssh_private_key_file=vprofile-key.pem
+
+# Can assigne variables at the global level: In our case web & db servers have the same variables(ansible_user=centos  ansible_ssh_private_key_file=vprofile-key.pem)
+
+[dc_ohio:vars]
+ansible_user=centos
+ansible_ssh_private_key_file=vprofile-key.pem
